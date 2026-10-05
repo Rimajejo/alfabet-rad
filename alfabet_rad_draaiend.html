@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alfabet Rad</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 18px;
+    font-family: Arial, sans-serif; background: linear-gradient(135deg,#eef2ff,#fff0f5);
+  }
+  .wheel-wrap { position: relative; width: min(90vw, 720px); aspect-ratio: 1; }
+  #wheel {
+    width: 100%; height: 100%; display: block;
+    transform: rotate(0deg);
+    transition: transform 5s cubic-bezier(.12,.72,.15,1);
+    filter: drop-shadow(0 8px 10px rgba(0,0,0,.22));
+  }
+  .pointer {
+    position: absolute; right: -2px; top: 50%; transform: translateY(-50%);
+    width: 0; height: 0;
+    border-top: 25px solid transparent; border-bottom: 25px solid transparent;
+    border-right: 0; border-left: 48px solid #f4bd16;
+    filter: drop-shadow(1px 2px 2px rgba(0,0,0,.35));
+    z-index: 3;
+  }
+  button {
+    border: 0; border-radius: 999px; padding: 14px 34px; font-size: 20px;
+    font-weight: 700; cursor: pointer; background: #222; color: white;
+    box-shadow: 0 4px 10px rgba(0,0,0,.2);
+  }
+  button:disabled { opacity: .55; cursor: default; }
+  #result { min-height: 28px; font-size: 22px; font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="wheel-wrap">
+  <svg id="wheel" viewBox="0 0 700 700" aria-label="Alfabet rad">
+    <g id="segments"></g>
+    <circle cx="350" cy="350" r="76" fill="white"/>
+    <circle cx="350" cy="350" r="76" fill="none" stroke="#bbb" stroke-width="2"/>
+  </svg>
+  <div class="pointer"></div>
+</div>
+<button id="spin">Draai het rad!</button>
+<div id="result"></div>
+
+<script>
+const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+const colors = ["#e51b2b","#2875df","#12a83b","#f4c21b"];
+const svg = document.getElementById("wheel");
+const group = document.getElementById("segments");
+const cx=350, cy=350, R=335, inner=76;
+const step=360/26;
+let rotation=0, spinning=false;
+
+function point(r,a){
+  const t=(a-90)*Math.PI/180;
+  return [cx+r*Math.cos(t), cy+r*Math.sin(t)];
+}
+function wedge(a1,a2){
+  const p1=point(R,a1), p2=point(R,a2), q1=point(inner,a2), q2=point(inner,a1);
+  const large=(a2-a1)>180?1:0;
+  return `M ${q2[0]} ${q2[1]} L ${p1[0]} ${p1[1]} A ${R} ${R} 0 ${large} 1 ${p2[0]} ${p2[1]} L ${q1[0]} ${q1[1]} A ${inner} ${inner} 0 ${large} 0 ${q2[0]} ${q2[1]} Z`;
+}
+letters.forEach((letter,i)=>{
+  const a1=i*step, a2=(i+1)*step;
+  const path=document.createElementNS("http://www.w3.org/2000/svg","path");
+  path.setAttribute("d",wedge(a1,a2));
+  path.setAttribute("fill",colors[i%4]);
+  path.setAttribute("stroke","white"); path.setAttribute("stroke-width","2");
+  group.appendChild(path);
+
+  const mid=(a1+a2)/2;
+  const [x,y]=point(275,mid);
+  const text=document.createElementNS("http://www.w3.org/2000/svg","text");
+  text.setAttribute("x",x); text.setAttribute("y",y);
+  text.setAttribute("fill","white"); text.setAttribute("font-size","42");
+  text.setAttribute("font-weight","700"); text.setAttribute("text-anchor","middle");
+  text.setAttribute("dominant-baseline","middle");
+  text.setAttribute("transform",`rotate(${mid-0},${x},${y})`);
+  text.textContent=letter;
+  group.appendChild(text);
+});
+
+const btn=document.getElementById("spin"), result=document.getElementById("result");
+btn.onclick=()=>{
+  if(spinning) return;
+  spinning=true; btn.disabled=true; result.textContent="";
+  const extra=360*(5+Math.floor(Math.random()*4))+Math.random()*360;
+  rotation += extra;
+  svg.style.transform=`rotate(${rotation}deg)`;
+  setTimeout(()=>{
+    const normalized=((rotation%360)+360)%360;
+    // Pointer is at 90° in SVG coordinates; determine letter under pointer.
+    const pointerAngle=(360- normalized + 90)%360;
+    const index=Math.floor(pointerAngle/step)%26;
+    result.textContent=`De letter is: ${letters[index]}`;
+    spinning=false; btn.disabled=false;
+  },5100);
+};
+</script>
+</body>
+</html>
