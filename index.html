@@ -2,105 +2,256 @@
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Alfabet Rad </title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>De Lekkerste Muzikale Uren met Kees Sabbelaar | Sparkradio</title>
 <style>
-  * { box-sizing: border-box; }
-  body {
-    margin: 0; min-height: 100vh; display: flex; flex-direction: column;
-    align-items: center; justify-content: center; gap: 18px;
-    font-family: Arial, sans-serif; background: linear-gradient(135deg,#eef2ff,#fff0f5);
-  }
-  .wheel-wrap { position: relative; width: min(90vw, 720px); aspect-ratio: 1; }
-  #wheel {
-    width: 100%; height: 100%; display: block;
-    transform: rotate(0deg);
-    transition: transform 5s cubic-bezier(.12,.72,.15,1);
-    filter: drop-shadow(0 8px 10px rgba(0,0,0,.22));
-  }
-  .pointer {
-    position: absolute; right: -2px; top: 50%; transform: translateY(-50%);
-    width: 0; height: 0;
-    border-top: 25px solid transparent; border-bottom: 25px solid transparent;
-    border-right: 0; border-left: 48px solid #f4bd16;
-    filter: drop-shadow(1px 2px 2px rgba(0,0,0,.35));
-    z-index: 3;
-  }
-  button {
-    border: 0; border-radius: 999px; padding: 14px 34px; font-size: 20px;
-    font-weight: 700; cursor: pointer; background: #222; color: white;
-    box-shadow: 0 4px 10px rgba(0,0,0,.2);
-  }
-  button:disabled { opacity: .55; cursor: default; }
-  #result { min-height: 28px; font-size: 22px; font-weight: 700; }
+:root {
+  --purple: #8d42ff;
+  --pink: #e34cff;
+  --dark: #100b1b;
+  --panel: #1b1229;
+  --white: #fff;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  padding: 24px 16px 40px;
+  background:
+    radial-gradient(ellipse at top, #38205a 0%, #100b1b 58%);
+  color: var(--white);
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+}
+header { max-width: 760px; margin: 0 auto 22px; }
+.logo {
+  display: block;
+  width: min(260px, 75%);
+  max-height: 145px;
+  object-fit: contain;
+  margin: 0 auto 22px;
+}
+.eyebrow {
+  color: #d4b4ff;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+h1 {
+  margin: 12px 0;
+  font-size: clamp(28px, 6vw, 48px);
+  line-height: 1.08;
+  text-transform: uppercase;
+  text-shadow: 0 0 28px #8d42ff66;
+}
+h1 span { color: #c99aff; }
+.subtitle {
+  color: #ded3eb;
+  font-size: 17px;
+  line-height: 1.6;
+}
+main {
+  width: min(100%, 620px);
+  margin: 0 auto;
+  padding: 24px 16px;
+  background: #1b1229cc;
+  border: 1px solid #a96aff55;
+  border-radius: 24px;
+  box-shadow: 0 18px 60px #0006;
+}
+.instruction {
+  margin: 0 0 20px;
+  color: #eee5fa;
+}
+.wheel-wrap {
+  position: relative;
+  width: min(100%, 440px);
+  aspect-ratio: 1;
+  margin: 0 auto 24px;
+}
+#wheel {
+  display: block;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 8px 18px #0008);
+  transition: transform 5s cubic-bezier(.12,.72,.15,1);
+}
+.pointer {
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  width: 0;
+  height: 0;
+  border-left: 17px solid transparent;
+  border-right: 17px solid transparent;
+  border-top: 35px solid #fff;
+  filter: drop-shadow(0 3px 5px #0009);
+}
+.center-logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 23%;
+  height: 23%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 4px solid white;
+  background: #100b1b;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  box-shadow: 0 0 0 5px #8d42ff, 0 0 25px #8d42ff99;
+}
+.center-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+button {
+  width: 100%;
+  max-width: 360px;
+  padding: 17px 24px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(100deg, #7838ff, #d044ff);
+  color: white;
+  font-size: 18px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 8px 24px #8d42ff55;
+}
+button:hover { filter: brightness(1.12); }
+button:disabled { opacity: .6; cursor: wait; }
+#result {
+  min-height: 64px;
+  margin-top: 22px;
+  padding: 15px;
+  border: 1px solid #a96aff55;
+  border-radius: 14px;
+  background: #100b1b88;
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+footer {
+  margin: 22px auto 0;
+  color: #c5b3d8;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+@media (max-width: 420px) {
+  body { padding: 18px 10px 28px; }
+  main { padding: 20px 12px; }
+  .subtitle { font-size: 15px; }
+}
 </style>
 </head>
 <body>
-<div class="wheel-wrap">
-  <svg id="wheel" viewBox="0 0 700 700" aria-label="Alfabet rad">
-    <g id="segments"></g>
-    <circle cx="350" cy="350" r="76" fill="white"/>
-    <circle cx="350" cy="350" r="76" fill="none" stroke="#bbb" stroke-width="2"/>
-  </svg>
-  <div class="pointer"></div>
-</div>
-<button id="spin">Draai het rad!</button>
-<div id="result"></div>
+<header>
+  <img class="logo" src="sparkradio-logo.png" alt="Sparkradio"
+       onerror="this.style.display='none'">
+  <div class="eyebrow">Sparkradio presenteert</div>
+  <h1>De Lekkerste<br><span>Muzikale Uren</span></h1>
+  <p class="subtitle">Met Kees Sabbelaar<br>Laat het rad draaien en ontdek je letter!</p>
+</header>
+
+<main>
+  <p class="instruction">🎙️ Klaar voor een muzikale verrassing?</p>
+  <div class="wheel-wrap">
+    <div class="pointer"></div>
+    <svg id="wheel" viewBox="0 0 400 400"
+         role="img" aria-label="Draaiend alfabetrad">
+      <g id="segments"></g>
+      <circle cx="200" cy="200" r="48"
+              fill="#160e24" stroke="#fff" stroke-width="4"/>
+    </svg>
+    <div class="center-logo">
+      <img src="sparkradio-logo.png" alt="Sparkradio-logo"
+           onerror="this.style.display='none'">
+    </div>
+  </div>
+  <button id="spin">▶ DRAAI HET RAD!</button>
+  <div id="result" aria-live="polite">
+    Welke letter wordt het? Draai maar!
+  </div>
+</main>
+
+<footer>SPARKRADIO · LET THE SPARK HIT YOU!</footer>
 
 <script>
 const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
-const colors = ["#e51b2b","#2875df","#12a83b","#f4c21b"];
-const svg = document.getElementById("wheel");
+const colors = ["#7c35ed", "#342052", "#a342ed", "#5126a0"];
+const svgNS = "http://www.w3.org/2000/svg";
 const group = document.getElementById("segments");
-const cx=350, cy=350, R=335, inner=76;
-const step=360/26;
-let rotation=0, spinning=false;
+const wheel = document.getElementById("wheel");
+const button = document.getElementById("spin");
+const result = document.getElementById("result");
+const step = 360 / letters.length;
+let rotation = 0;
+let spinning = false;
 
-function point(r,a){
-  const t=(a-90)*Math.PI/180;
-  return [cx+r*Math.cos(t), cy+r*Math.sin(t)];
+function point(radius, angle) {
+  const rad = (angle - 90) * Math.PI / 180;
+  return [200 + radius * Math.cos(rad), 200 + radius * Math.sin(rad)];
 }
-function wedge(a1,a2){
-  const p1=point(R,a1), p2=point(R,a2), q1=point(inner,a2), q2=point(inner,a1);
-  const large=(a2-a1)>180?1:0;
-  return `M ${q2[0]} ${q2[1]} L ${p1[0]} ${p1[1]} A ${R} ${R} 0 ${large} 1 ${p2[0]} ${p2[1]} L ${q1[0]} ${q1[1]} A ${inner} ${inner} 0 ${large} 0 ${q2[0]} ${q2[1]} Z`;
+function make(tag, attrs) {
+  const el = document.createElementNS(svgNS, tag);
+  Object.entries(attrs).forEach(([key, value]) =>
+    el.setAttribute(key, value));
+  return el;
 }
-letters.forEach((letter,i)=>{
-  const a1=i*step, a2=(i+1)*step;
-  const path=document.createElementNS("http://www.w3.org/2000/svg","path");
-  path.setAttribute("d",wedge(a1,a2));
-  path.setAttribute("fill",colors[i%4]);
-  path.setAttribute("stroke","white"); path.setAttribute("stroke-width","2");
+
+letters.forEach((letter, i) => {
+  const start = i * step;
+  const end = (i + 1) * step;
+  const p1 = point(188, start);
+  const p2 = point(188, end);
+  const path = make("path", {
+    d: `M 200 200 L ${p1[0]} ${p1[1]} A 188 188 0 0 1 ${p2[0]} ${p2[1]} Z`,
+    fill: colors[i % colors.length],
+    stroke: "#fff",
+    "stroke-width": "1.5"
+  });
   group.appendChild(path);
 
-  const mid=(a1+a2)/2;
-  const [x,y]=point(275,mid);
-  const text=document.createElementNS("http://www.w3.org/2000/svg","text");
-  text.setAttribute("x",x); text.setAttribute("y",y);
-  text.setAttribute("fill","white"); text.setAttribute("font-size","42");
-  text.setAttribute("font-weight","700"); text.setAttribute("text-anchor","middle");
-  text.setAttribute("dominant-baseline","middle");
-  text.setAttribute("transform",`rotate(${mid-0},${x},${y})`);
-  text.textContent=letter;
-  group.appendChild(text);
+  const mid = start + step / 2;
+  const p = point(148, mid);
+  const label = make("text", {
+    x: p[0], y: p[1],
+    fill: "#fff",
+    "font-size": "15",
+    "font-weight": "800",
+    "text-anchor": "middle",
+    "dominant-baseline": "middle",
+    transform: `rotate(${mid}, ${p[0]}, ${p[1]})`
+  });
+  label.textContent = letter;
+  group.appendChild(label);
 });
 
-const btn=document.getElementById("spin"), result=document.getElementById("result");
-btn.onclick=()=>{
-  if(spinning) return;
-  spinning=true; btn.disabled=true; result.textContent="";
-  const extra=360*(5+Math.floor(Math.random()*4))+Math.random()*360;
+button.addEventListener("click", () => {
+  if (spinning) return;
+  spinning = true;
+  button.disabled = true;
+  result.textContent = "✨ Het rad draait...";
+
+  const extra = (5 + Math.floor(Math.random() * 4)) * 360
+              + Math.random() * 360;
   rotation += extra;
-  svg.style.transform=`rotate(${rotation}deg)`;
-  setTimeout(()=>{
-    const normalized=((rotation%360)+360)%360;
-    // Pointer is at 90° in SVG coordinates; determine letter under pointer.
-    const pointerAngle=(360- normalized + 90)%360;
-    const index=Math.floor(pointerAngle/step)%26;
-    result.textContent=`De letter is: ${letters[index]}`;
-    spinning=false; btn.disabled=false;
-  },5100);
-};
+  wheel.style.transform = `rotate(${rotation}deg)`;
+
+  window.setTimeout(() => {
+    const normalized = ((rotation % 360) + 360) % 360;
+    const pointerAngle = (360 - normalized + 360) % 360;
+    const index = Math.floor(pointerAngle / step) % letters.length;
+    result.textContent = `🎉 De letter is: ${letters[index]}!`;
+    spinning = false;
+    button.disabled = false;
+  }, 5100);
+});
 </script>
 </body>
 </html>
