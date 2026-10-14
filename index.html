@@ -254,7 +254,24 @@ clickOsc.stop(audio.currentTime + 0.025);
               + Math.random() * 360;
   rotation += extra;
   wheel.style.transform = `rotate(${rotation}deg)`;
+const clickTimer = setInterval(() => {
+  if (!spinning) {
+    clearInterval(clickTimer);
+    return;
+  }
 
+  const tick = audio.createOscillator();
+  const gain = audio.createGain();
+
+  tick.type = "square";
+  tick.frequency.value = 1000;
+  gain.gain.value = 0.025;
+
+  tick.connect(gain);
+  gain.connect(audio.destination);
+  tick.start();
+  tick.stop(audio.currentTime + 0.02);
+}, 180);
   window.setTimeout(() => {
     const normalized = ((rotation % 360) + 360) % 360;
     const pointerAngle = (360 - normalized + 360) % 360;
