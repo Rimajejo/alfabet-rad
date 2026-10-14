@@ -234,11 +234,22 @@ letters.forEach((letter, i) => {
 });
 
 button.addEventListener("click", () => {
+  if (!window.radAudio) window.radAudio = new (window.AudioContext || window.webkitAudioContext)();
+const audio = window.radAudio;
   if (spinning) return;
   spinning = true;
   button.disabled = true;
   result.textContent = "✨ Het rad draait...";
-
+if (audio.state === "suspended") audio.resume();
+const clickOsc = audio.createOscillator();
+const clickGain = audio.createGain();
+clickOsc.type = "square";
+clickOsc.frequency.value = 900;
+clickGain.gain.value = 0.04;
+clickOsc.connect(clickGain);
+clickGain.connect(audio.destination);
+clickOsc.start();
+clickOsc.stop(audio.currentTime + 0.025);
   const extra = (5 + Math.floor(Math.random() * 4)) * 360
               + Math.random() * 360;
   rotation += extra;
@@ -249,6 +260,17 @@ button.addEventListener("click", () => {
     const pointerAngle = (360 - normalized + 360) % 360;
     const index = Math.floor(pointerAngle / step) % letters.length;
     result.textContent = `🎉 De letter is: ${letters[index]}!`;
+    const bell = audio.createOscillator();
+const bellGain = audio.createGain();
+bell.type = "sine";
+bell.frequency.setValueAtTime(880, audio.currentTime);
+bell.frequency.setValueAtTime(1320, audio.currentTime + 0.12);
+bellGain.gain.setValueAtTime(0.2, audio.currentTime);
+bellGain.gain.exponentialRampToValueAtTime(0.001, audio.currentTime + 0.6);
+bell.connect(bellGain);
+bellGain.connect(audio.destination);
+bell.start();
+bell.stop(audio.currentTime + 0.6);
     spinning = false;
     button.disabled = false;
   }, 5100);
